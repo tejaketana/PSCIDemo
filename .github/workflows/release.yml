@@ -1,4 +1,4 @@
-name: .NET
+name: Deploy Release
 
 on:
   release:
@@ -29,9 +29,9 @@ jobs:
       run: dotnet build --configuration Release
       
     - name: dotnet publish
-      run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
+      run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
       
-    - name: Deploy to Azure Web Apps
+    - name: 'Deploy to Azure Web Apps'
       uses: Azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
