@@ -1,8 +1,7 @@
 name: .NET
 
 on:
-  repository_dispatch:
-    types: [run_my_workflow_event]
+  push
 
 jobs:
   build:
