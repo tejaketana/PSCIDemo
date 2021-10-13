@@ -1,8 +1,8 @@
 name: .NET
 
 on:
-  pull_request:
-    branches: [ master ]
+  repository_dispatch:
+    types: [run_my_workflow_event]
 
 jobs:
   build:
