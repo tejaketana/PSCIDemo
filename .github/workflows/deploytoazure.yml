@@ -3,8 +3,6 @@ name: 'Deploy to Azure App Service'
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
@@ -12,7 +10,9 @@ env:
 
 jobs:
   build:
-
+    env:
+      BUILD_CONFIG: Release
+      
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration '${{ env.BUILD_CONFIG }}'
       
     - name: Publish
       run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
@@ -36,7 +36,9 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        slot-name: 'development'
+        slot-name: '${{ env.SLOT_NAME }}'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      env:
+        SLOT_NAME: development
 
