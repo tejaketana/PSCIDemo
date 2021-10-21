@@ -12,6 +12,7 @@ jobs:
   build:
     env:
       BUILD_CONFIG: Release
+      DOT_NET_VERSION: 5.0.x
       
     runs-on: ubuntu-latest
 
@@ -21,7 +22,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: '${{ env.DOT_NET_VERSION }}'
+        
+    - name: Print build config
+      run: echo "Build Config - $BUILD_CONFIG"
+        
+    - name: Print Default Environment variable of person or app that initiated workflow
+      run: echo "Workflow initiated by - $GITHUB_ACTOR"        
         
     - name: Restore dependencies
       run: dotnet restore
