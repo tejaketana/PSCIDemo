@@ -1,0 +1,63 @@
+name: 'Deploy to Azure App Service Using Azure Login Action'
+
+on:
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
+  AZURE_WEBAPP_NAME: PSDeployDemo
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+      DOT_NET_VERSION: 5.0.x
+      
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '${{ env.DOT_NET_VERSION }}'      
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration '${{ env.BUILD_CONFIG }}'
+      
+    - name: Publish
+      run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      
+    - name: Install CLI-beta
+      run: |
+              cd ../..
+              $CWD = Convert-Path .
+              echo $CWD
+              python --version
+              python -m venv oidc-venv
+              . .\oidc-venv\Scripts\Activate.ps1
+              python -m pip install -q --upgrade pip
+              echo "started installing cli beta" 
+              pip install -q --extra-index-url https://azcliprod.blob.core.windows.net/beta/simple/ azure-cli
+              echo "installed cli beta" 
+              echo "$CWD\oidc-venv\Scripts" >> $env:GITHUB_PATH
+              
+    - name: OIDC Login to Azure Public Cloud
+      uses: azure/login@v1.4.0
+      with:
+        client-id: ${{ 7b1fe0dc-1855-4b68-8263-01bf9afdca91 }}
+        tenant-id: ${{ 3d2faa73-87ca-4f25-adb8-71214334f8d5 }}
+        subscription-id: ${{ 0ef1dba3-743c-4fe2-97bf-8d81c3e64c20 }}
+            
+    - name: Deploy
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        slot-name: '${{ env.SLOT_NAME }}'
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      env:
+        SLOT_NAME: production
