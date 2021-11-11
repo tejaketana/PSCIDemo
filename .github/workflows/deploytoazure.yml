@@ -1,10 +1,7 @@
 name: 'Deploy to Azure App Service'
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
@@ -12,7 +9,10 @@ env:
 
 jobs:
   build:
-
+    env:
+      BUILD_CONFIG: Release
+      DOT_NET_VERSION: 5.0.x
+      
     runs-on: ubuntu-latest
 
     steps:
@@ -21,13 +21,19 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: '${{ env.DOT_NET_VERSION }}'
+        
+    - name: Print build config
+      run: echo "Build Config - $BUILD_CONFIG"
+        
+    - name: Print Default Environment variable of person or app that initiated workflow
+      run: echo "Workflow initiated by - $GITHUB_ACTOR"        
         
     - name: Restore dependencies
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --configuration Release
+      run: dotnet build --configuration '${{ env.BUILD_CONFIG }}'
       
     - name: Publish
       run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
@@ -36,7 +42,9 @@ jobs:
       uses: Azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        slot-name: 'development'
+        slot-name: '${{ env.SLOT_NAME }}'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
         package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+      env:
+        SLOT_NAME: development
 
