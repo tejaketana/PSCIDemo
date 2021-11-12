@@ -11,6 +11,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    - name: Attempt to print secret value
+      run: echo 'Printing secret value for AZURE_CREDENTIALS ${{ secrets.AZURE_CREDENTIALS }}'
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
