@@ -48,7 +48,7 @@ jobs:
     - name: OIDC Login to Azure Public Cloud
       uses: azure/login@v1.4.0
       with:
-        client-id: 7b1fe0dc-1855-4b68-8263-01bf9afdca91 
+        client-id: a7807047-a0ef-4db4-98af-773da03e8bfd 
         tenant-id: 3d2faa73-87ca-4f25-adb8-71214334f8d5 
         subscription-id: 0ef1dba3-743c-4fe2-97bf-8d81c3e64c20 
             
