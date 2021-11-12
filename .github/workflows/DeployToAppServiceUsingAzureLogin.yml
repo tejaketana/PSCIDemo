@@ -7,6 +7,9 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   AZURE_WEBAPP_NAME: PSDeployDemo
 
+permissions:
+  id-token: write
+
 jobs:
   build:
     env:
