@@ -7,9 +7,6 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   AZURE_WEBAPP_NAME: PSDeployDemo
 
-permissions:
-  id-token: write
-
 jobs:
   build:
     env:
@@ -35,25 +32,10 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
       
-    - name: Install CLI-beta
-      run: |
-        cd ../..
-        CWD="$(pwd)"
-        python3 -m venv oidc-venv
-        . oidc-venv/bin/activate
-        echo "activated environment"
-        python3 -m pip install -q --upgrade pip
-        echo "started installing cli beta"
-        pip install -q --extra-index-url https://azcliprod.blob.core.windows.net/beta/simple/ azure-cli
-        echo "***************installed cli beta*******************"
-        echo "$CWD/oidc-venv/bin" >> $GITHUB_PATH
-              
-    - name: OIDC Login to Azure Public Cloud
-      uses: azure/login@v1.4.0
+    - name: Login to Azure Public Cloud
+      uses: azure/login@v1
       with:
-        client-id: a7807047-a0ef-4db4-98af-773da03e8bfd 
-        tenant-id: 3d2faa73-87ca-4f25-adb8-71214334f8d5 
-        subscription-id: 0ef1dba3-743c-4fe2-97bf-8d81c3e64c20 
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
             
     - name: Deploy
       uses: Azure/webapps-deploy@v2
