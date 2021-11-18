@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, azure]
+    runs-on: [self-hosted, linux]
 
     steps:
     - name: "Login and do something"
