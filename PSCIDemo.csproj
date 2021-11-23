@@ -4,4 +4,14 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include=".github\workflows\azureclicommands.yml" />
+    <None Include=".github\workflows\DeployToAppServiceUsingAzureLogin.yml" />
+    <None Include=".github\workflows\deploytoazure.yml" />
+    <None Include=".github\workflows\deployusingazurecli.yml" />
+    <None Include=".github\workflows\dotnet.yml" />
+    <None Include=".github\workflows\matrixtesting.yml" />
+    <None Include=".github\workflows\testing.yml" />
+  </ItemGroup>
+
 </Project>
