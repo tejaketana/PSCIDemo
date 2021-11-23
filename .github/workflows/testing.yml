@@ -9,13 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     
     container:
-      image: mcr.microsoft.com/dotnet/aspnet:5.0
+      image: mcr.microsoft.com/dotnet/sdk:5.0
 
     steps:
       - uses: actions/checkout@v2
                   
       - name: Restore dependencies
         run: |
-          dotnet restore
-          dotnet build --configuration '${{ env.BUILD_CONFIG }}'
+          dotnet --version
           echo this is running on - $RUNNER_OS
+          dotnet restore
+          dotnet build --configuration 'release'
+          
