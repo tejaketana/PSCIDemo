@@ -20,4 +20,7 @@ jobs:
           echo this is running on - $RUNNER_OS
           dotnet restore
           dotnet build --configuration 'release'
+
+      - name: run app
+        run: http://localhost
           
