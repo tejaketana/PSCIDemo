@@ -11,6 +11,15 @@ jobs:
     container:
       image: mcr.microsoft.com/dotnet/sdk:5.0
 
+    services:
+          sqlserver:
+            image: mcr.microsoft.com/mssql/server:2019-latest
+            env:
+              SA_PASSWORD: P@ssword1$
+              ACCEPT_EULA: Y
+            ports:
+              - "1433:1433"
+
     steps:
       - uses: actions/checkout@v2
                   
@@ -21,6 +30,13 @@ jobs:
           dotnet restore
           dotnet build --configuration 'release'
 
-      - name: run app
-        run: http://localhost
+      - name: connect to sql server
+        run: |
+          sudo docker exec -it sqlserver "bash"
+          /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P P@ssword1$
+          CREATE DATABASE TestDB
+          SELECT Name from sys.Databases
+          GO
+
+
           
