@@ -40,7 +40,7 @@ jobs:
         if-no-files-found: error
   
 
-  deploy_staging:
+  deploy_job:
     needs: build
     runs-on: ubuntu-latest
 
@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Download a Build Artifact
-      uses: actions/download-artifact@v2.2.2
+      uses: actions/download-artifact@v2.0.8
       with:
         name: .net-app
         path: ${{env.DOTNET_ROOT}}/myapp
