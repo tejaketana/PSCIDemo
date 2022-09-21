@@ -53,7 +53,7 @@ jobs:
       uses: actions/download-artifact@v2.0.8
       with:
         name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
+        path: .net-app
 
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
