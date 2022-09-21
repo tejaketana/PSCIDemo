@@ -49,11 +49,11 @@ jobs:
       #url: ${{ steps.deploywebapp.outputs.webapp-url }}
 
     steps:
-    #- name: Download a Build Artifact
-     # uses: actions/download-artifact@v2.0.8
-      #with:
-       # name: .net-app
-        #path: ${{env.DOTNET_ROOT}}/myapp
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.0.8
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/myapp
 
     - name: 'Run Azure webapp deploy action using publish profile credentials'
       uses: azure/webapps-deploy@v2
